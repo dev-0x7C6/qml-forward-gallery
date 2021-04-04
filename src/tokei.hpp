@@ -6,6 +6,7 @@ namespace model {
 
 struct entry {
     QString name;
+	QString url;
 };
 
 using entries = std::vector<entry>;
