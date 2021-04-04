@@ -1,30 +1,23 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <src/downloader.hpp>
+
+#include <functional>
+
 #include <QFile>
-#include <QDebug>
+#include <QDir>
 
-class FileDownloader {
-public:
-	void download(const QUrl &source, const QString &path) {
-		QNetworkRequest request(source);
-		auto reply = m_manager.get(request);
+auto save_to_file(const QString &path) {
+	return [path](const QByteArray &data) {
+		QFile file(path);
+		file.open(QIODevice::ReadWrite);
+		file.write(data);
+		file.close();
+	};
+}
 
-		QObject::connect(reply, &QNetworkReply::finished, [reply, path]() {
-			QFile file(path);
-			file.open(QIODevice::ReadWrite);
-			file.write(reply->readAll());
-			file.close();
-		});
-	}
-
-private:
-	QNetworkAccessManager m_manager;
-};
-
+const auto metadata = QDir::homePath() + QDir::separator() + ".foto-tokei" + QDir::separator();
 
 int main(int argc, char *argv[])
 {
@@ -34,8 +27,13 @@ int main(int argc, char *argv[])
 
 	QGuiApplication app(argc, argv);
 
-	FileDownloader downloader;
-	downloader.download(QUrl("https://devwork.space/clock/hiroshima/0000.jpg"), "/home/dev/0000.jpg");
+	QDir dir;
+	dir.mkpath(metadata);
+
+	network::downloader downloader;
+	downloader.download(QUrl("https://devwork.space/tokei/index.ini"), save_to_file(metadata + "index.ini"));
+
+
 
 	QQmlApplicationEngine engine;
 	const QUrl url(QStringLiteral("qrc:/main.qml"));

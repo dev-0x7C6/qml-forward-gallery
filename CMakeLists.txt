@@ -16,6 +16,8 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
         src/main.cpp
+		src/downloader.hpp
+		src/downloader.cpp
         src/qml.qrc
 )
 
