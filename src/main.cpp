@@ -7,6 +7,7 @@
 #include <functional>
 
 #include <QFile>
+#include <QQmlContext>
 #include <QDir>
 #include <QSettings>
 
@@ -56,6 +57,8 @@ int main(int argc, char *argv[]) {
 	downloader.download(QUrl("https://devwork.space/tokei/index.ini"), save_to_file(metadata + "index.ini", model));
 
 	QQmlApplicationEngine engine;
+	engine.rootContext()->setContextProperty("tokeiModel", &model);
+
 	const QUrl url(QStringLiteral("qrc:/main.qml"));
 	QObject::connect(
 		&engine, &QQmlApplicationEngine::objectCreated,

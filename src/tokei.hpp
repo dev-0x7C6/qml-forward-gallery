@@ -5,27 +5,29 @@
 namespace model {
 
 struct entry {
-    QString name;
+	QString name;
 	QString url;
 };
 
 using entries = std::vector<entry>;
 
-class tokei final : public QAbstractListModel
-{
+class tokei final : public QAbstractListModel {
+	Q_OBJECT
 public:
-    virtual ~tokei() final = default;
+	virtual ~tokei() final = default;
 
-    QModelIndex index(int row, int column, const QModelIndex &parent) const final;
-    QModelIndex parent(const QModelIndex &child) const final;
-    int rowCount(const QModelIndex &parent) const final;
-    int columnCount(const QModelIndex &parent) const final;
-    QVariant data(const QModelIndex &index, int role) const final;
+	enum Role {
+		Name = Qt::UserRole,
+	};
 
-    void setEntries(entries &&);
+	int rowCount(const QModelIndex &parent) const final;
+	QVariant data(const QModelIndex &index, int role) const final;
+	QHash<int, QByteArray> roleNames() const final;
+
+	void setEntries(entries &&);
 
 private:
-    entries m_entries;
+	entries m_entries;
 };
 
-}
+} // namespace model

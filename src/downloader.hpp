@@ -13,4 +13,4 @@ private:
 	QNetworkAccessManager m_manager;
 };
 
-}
+} // namespace network
