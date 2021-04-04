@@ -15,10 +15,12 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
+        src/downloader.cpp
+        src/downloader.hpp
         src/main.cpp
-		src/downloader.hpp
-		src/downloader.cpp
         src/qml.qrc
+        src/tokei.cpp
+        src/tokei.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

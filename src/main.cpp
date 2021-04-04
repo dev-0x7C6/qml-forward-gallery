@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 
 #include <src/downloader.hpp>
+#include <src/tokei.hpp>
 
 #include <functional>
 
@@ -31,6 +32,8 @@ int main(int argc, char *argv[])
 	dir.mkpath(metadata);
 
 	network::downloader downloader;
+    model::tokei model;
+
 	downloader.download(QUrl("https://devwork.space/tokei/index.ini"), save_to_file(metadata + "index.ini"));
 
 
