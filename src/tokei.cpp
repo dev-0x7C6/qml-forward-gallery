@@ -17,6 +17,13 @@ void tokei::setEntries(entries &&rhs) {
 	endResetModel();
 }
 
+std::optional<entry> tokei::selected() {
+	if (m_entries.empty())
+		return {};
+
+	return m_entries[0];
+}
+
 QHash<int, QByteArray> tokei::roleNames() const {
 	QHash<int, QByteArray> roles;
 	roles[Name] = "name";

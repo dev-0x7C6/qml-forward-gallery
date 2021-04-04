@@ -31,6 +31,15 @@ Window {
 	}
 
 	Image {
+		id: img
 		anchors.fill: parent
+		fillMode: Image.PreserveAspectFit
+	}
+
+	Connections {
+		target: tokeiModel
+		function onImageReady(path) {
+			img.source = "file://" + path;
+		}
 	}
 }

@@ -26,6 +26,11 @@ public:
 
 	void setEntries(entries &&);
 
+	std::optional<entry> selected();
+
+signals:
+	void imageReady(const QString &);
+
 private:
 	entries m_entries;
 };
