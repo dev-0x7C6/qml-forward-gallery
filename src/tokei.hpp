@@ -28,10 +28,13 @@ public:
 
 	std::optional<entry> selected();
 
+	Q_INVOKABLE void setCurrentIndex(int index);
+
 signals:
 	void imageReady(const QString &);
 
 private:
+	int m_currentIndex{0};
 	entries m_entries;
 };
 

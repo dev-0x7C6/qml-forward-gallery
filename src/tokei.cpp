@@ -13,6 +13,7 @@ QVariant tokei::data(const QModelIndex &index, int) const {
 
 void tokei::setEntries(entries &&rhs) {
 	beginResetModel();
+	m_currentIndex = 0;
 	m_entries = std::move(rhs);
 	endResetModel();
 }
@@ -21,7 +22,11 @@ std::optional<entry> tokei::selected() {
 	if (m_entries.empty())
 		return {};
 
-	return m_entries[0];
+	return m_entries[m_currentIndex];
+}
+
+void tokei::setCurrentIndex(int index) {
+	m_currentIndex = index;
 }
 
 QHash<int, QByteArray> tokei::roleNames() const {
