@@ -45,3 +45,5 @@ target_link_libraries(qml-forward-gallery
   Qt${QT_VERSION_MAJOR}::Quick
   Qt${QT_VERSION_MAJOR}::Network
 )
+
+install(TARGETS qml-forward-gallery RUNTIME DESTINATION bin)
