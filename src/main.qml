@@ -3,70 +3,34 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 
 Window {
-    width: 640
-    height: 480
+    id: root
+
+    property int index: -1
+
+    function updateTime() {
+        title.text = database.time();
+    }
+
+    function updateImage(delta = 1) {
+        index += delta;
+        if (index >= database.count())
+            index = 0;
+
+        if (index < 0)
+            index = database.count() - 1;
+
+        img.source = "file://" + database.path(index);
+        nextImageTimer.restart();
+    }
+
+    width: 800
+    height: 800 * (9 / 16)
     visible: true
-    title: qsTr("Hello World")
-
-    Drawer {
-        id: drawer
-
-        width: parent.width * 0.4
-        height: parent.height
-
-        ListView {
-            id: list
-
-            anchors.fill: parent
-            model: tokeiModel
-            delegate: option
-            highlight: highlightBar
-            highlightFollowsCurrentItem: true
-            Component.onCompleted: {
-                currentIndex = 0;
-            }
-
-            Component {
-                id: option
-
-                Item {
-                    width: list.width
-                    height: 32
-
-                    Text {
-                        anchors.fill: parent
-                        text: name
-                        topPadding: 8
-                        bottomPadding: 8
-                        leftPadding: 8
-                        font.bold: true
-                        font.pixelSize: 16
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            list.currentIndex = index;
-                            tokeiModel.setCurrentIndex(index);
-                        }
-                    }
-
-                }
-
-            }
-
-            Component {
-                id: highlightBar
-
-                Rectangle {
-                    anchors.fill: list.currentItem
-                    color: "#FFFF88"
-                }
-
-            }
-
-        }
-
+    color: "darkGray"
+    title: qsTr("qml-forward-gallery")
+    Component.onCompleted: {
+        updateTime();
+        updateImage();
     }
 
     Image {
@@ -74,14 +38,60 @@ Window {
 
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit
+        focus: true
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Forward)
+                updateImage();
+
+            if (event.key === Qt.Key_Back)
+                updateImage(-1);
+
+            if (event.key === Qt.Key_Space)
+                updateImage();
+
+            if (event.key === Qt.Key_Left)
+                updateImage(-1);
+
+            if (event.key === Qt.Key_Right)
+                updateImage();
+
+        }
     }
 
-    Connections {
-        function onImageReady(path) {
-            img.source = "file://" + path;
-        }
+    Rectangle {
+        id: bar
 
-        target: tokeiModel
+        anchors.top: img.top
+        height: 50
+        width: parent.width
+        color: "black"
+        opacity: 0.6
+    }
+
+    Label {
+        id: title
+
+        anchors.fill: bar
+        font.pixelSize: bar.height / 2
+        color: "white"
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+    }
+
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: updateTime()
+    }
+
+    Timer {
+        id: nextImageTimer
+
+        interval: 10000
+        running: true
+        repeat: true
+        onTriggered: updateImage()
     }
 
 }
