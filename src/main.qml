@@ -1,5 +1,7 @@
+import QtGraphicalEffects 1.15
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 
 Window {
@@ -38,6 +40,42 @@ Window {
 
         anchors.fill: parent
         fillMode: database.stretch() ? Image.Stretch : Image.PreserveAspectFit
+    }
+
+    Drawer {
+        edge: Qt.BottomEdge
+        dragMargin: 100
+        width: parent.width
+        height: parent.height * 0.5
+
+        ColumnLayout {
+            anchors.fill: parent
+
+            Slider {
+                id: brightness
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 50
+                value: 0.5
+            }
+
+            Slider {
+                id: contrast
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 50
+                value: 0.5
+            }
+
+        }
+
+    }
+
+    BrightnessContrast {
+        anchors.fill: img
+        source: img
+        brightness: brightness.value
+        contrast: contrast.value
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Forward)
