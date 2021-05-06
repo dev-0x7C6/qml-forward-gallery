@@ -20,7 +20,9 @@ int main(int argc, char *argv[]) {
 	parser.addHelpOption();
 	parser.addVersionOption();
 
-	parser.addOptions({{{"d", "directory"}, QCoreApplication::translate("main", "open directory."), QCoreApplication::translate("main", "directory")}});
+	parser.addOptions({//
+		{{"d", "directory"}, QCoreApplication::translate("main", "open directory."), QCoreApplication::translate("main", "directory")},
+		{{"s", "stretch"}, QCoreApplication::translate("main", "stretch image")}});
 	parser.process(app);
 
 	const auto paths = parser.values("directory");
@@ -30,8 +32,11 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
+	model::Options opts;
+	opts.stretch = parser.isSet("stretch");
+
 	QStringList list;
-	model::ImageDatabase database;
+	model::ImageDatabase database(std::move(opts));
 
 	for (auto &&path : paths) {
 		QDirIterator iter(path, QDir::Filter::NoDotAndDotDot | QDir::Filter::Files, QDirIterator::Subdirectories);

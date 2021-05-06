@@ -26,7 +26,7 @@ Window {
     width: 800
     height: 800 * (9 / 16)
     visible: true
-    color: "darkGray"
+    color: "black"
     title: qsTr("qml-forward-gallery")
     Component.onCompleted: {
         updateTime();
@@ -37,7 +37,7 @@ Window {
         id: img
 
         anchors.fill: parent
-        fillMode: Image.PreserveAspectFit
+        fillMode: database.stretch() ? Image.Stretch : Image.PreserveAspectFit
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Forward)
