@@ -37,11 +37,15 @@ Window {
 
     Image {
         id: img
-
         anchors.fill: parent
         fillMode: database.stretch() ? Image.Stretch : Image.PreserveAspectFit
         focus: true
         Keys.onPressed: {
+            if (event.key === Qt.Key_F11)
+                if (visibility === Window.FullScreen)
+                    showNormal(); else
+                    showFullScreen()
+
             if (event.key === Qt.Key_Forward)
                 updateImage();
 
@@ -56,7 +60,6 @@ Window {
 
             if (event.key === Qt.Key_Right)
                 updateImage();
-
         }
     }
 
@@ -74,7 +77,6 @@ Window {
 
             Slider {
                 id: brightness
-
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 value: 0
@@ -82,14 +84,11 @@ Window {
 
             Slider {
                 id: contrast
-
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 value: 0
             }
-
         }
-
     }
 
     BrightnessContrast {
