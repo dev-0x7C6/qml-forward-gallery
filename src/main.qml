@@ -40,42 +40,6 @@ Window {
 
         anchors.fill: parent
         fillMode: database.stretch() ? Image.Stretch : Image.PreserveAspectFit
-    }
-
-    Drawer {
-        edge: Qt.BottomEdge
-        dragMargin: 100
-        width: parent.width
-        height: parent.height * 0.5
-
-        ColumnLayout {
-            anchors.fill: parent
-
-            Slider {
-                id: brightness
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: 50
-                value: 0.5
-            }
-
-            Slider {
-                id: contrast
-
-                Layout.fillWidth: true
-                Layout.preferredHeight: 50
-                value: 0.5
-            }
-
-        }
-
-    }
-
-    BrightnessContrast {
-        anchors.fill: img
-        source: img
-        brightness: brightness.value
-        contrast: contrast.value
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Forward)
@@ -94,6 +58,47 @@ Window {
                 updateImage();
 
         }
+    }
+
+    Drawer {
+        id: bottomDrawer
+
+        edge: Qt.BottomEdge
+        dragMargin: 100
+        width: parent.width
+        height: parent.height * 0.5
+        onAboutToHide: img.focus = true
+
+        ColumnLayout {
+            anchors.fill: parent
+
+            Slider {
+                id: brightness
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 50
+                value: 0
+            }
+
+            Slider {
+                id: contrast
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 50
+                value: 0
+            }
+
+        }
+
+    }
+
+    BrightnessContrast {
+        id: effect
+
+        anchors.fill: img
+        source: img
+        brightness: brightness.value
+        contrast: contrast.value
     }
 
     Rectangle {
