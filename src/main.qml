@@ -88,7 +88,7 @@ Window {
     Timer {
         id: nextImageTimer
 
-        interval: 10000
+        interval: database.timeout()
         running: true
         repeat: true
         onTriggered: updateImage()

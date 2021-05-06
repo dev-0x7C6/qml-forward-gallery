@@ -22,7 +22,8 @@ int main(int argc, char *argv[]) {
 
 	parser.addOptions({//
 		{{"d", "directory"}, QCoreApplication::translate("main", "open directory."), QCoreApplication::translate("main", "directory")},
-		{{"s", "stretch"}, QCoreApplication::translate("main", "stretch image")}});
+		{{"s", "stretch"}, QCoreApplication::translate("main", "stretch image")},
+		{{"t", "timeout"}, QCoreApplication::translate("main", "next slide timeout"), QCoreApplication::translate("main", "time-ms")}});
 	parser.process(app);
 
 	const auto paths = parser.values("directory");
@@ -34,6 +35,8 @@ int main(int argc, char *argv[]) {
 
 	model::Options opts;
 	opts.stretch = parser.isSet("stretch");
+	if (parser.isSet("timeout"))
+		opts.timeout = parser.value("timeout").toInt();
 
 	QStringList list;
 	model::ImageDatabase database(std::move(opts));

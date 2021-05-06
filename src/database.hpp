@@ -6,6 +6,7 @@ namespace model {
 
 struct Options {
 	bool stretch{false};
+	int timeout{60000};
 };
 
 class ImageDatabase final : public QObject {
@@ -15,6 +16,7 @@ public:
 	virtual ~ImageDatabase() final = default;
 
 	Q_INVOKABLE bool stretch() const noexcept;
+	Q_INVOKABLE int timeout() const noexcept;
 	Q_INVOKABLE QString time() const noexcept;
 	Q_INVOKABLE int count() const noexcept;
 	Q_INVOKABLE QString path(int index) const noexcept;

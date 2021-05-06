@@ -12,6 +12,10 @@ auto ImageDatabase::stretch() const noexcept -> bool {
 	return m_options.stretch;
 }
 
+auto ImageDatabase::timeout() const noexcept -> int {
+	return m_options.timeout;
+}
+
 auto ImageDatabase::time() const noexcept -> QString {
 	return QDateTime::currentDateTime().toString("hh:mm");
 }
