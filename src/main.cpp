@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
 
 	parser.addOptions({//
 		{{"d", "directory"}, QCoreApplication::translate("main", "open directory."), QCoreApplication::translate("main", "directory")},
+		{{"q", "sort"}, QCoreApplication::translate("main", "sort file order by name.")},
 		{{"s", "stretch"}, QCoreApplication::translate("main", "stretch image")},
 		{{"t", "timeout"}, QCoreApplication::translate("main", "next slide timeout"), QCoreApplication::translate("main", "time-ms")}});
 	parser.process(app);
@@ -46,9 +47,12 @@ int main(int argc, char *argv[]) {
 
 		while (iter.hasNext())
 			list.append(iter.next());
-
-		database.setList(std::move(list));
 	}
+
+	if (parser.isSet("sort"))
+		list.sort();
+
+	database.setList(std::move(list));
 
 	QQmlApplicationEngine engine;
 	engine.rootContext()->setContextProperty("database", &database);
