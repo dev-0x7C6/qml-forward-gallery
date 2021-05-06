@@ -8,6 +8,7 @@ Window {
     id: root
 
     property int index: -1
+    property bool stretch: database.stretch()
 
     function updateTime() {
         title.text = database.time();
@@ -25,6 +26,13 @@ Window {
         nextImageTimer.restart();
     }
 
+    function toggleFullscreen() {
+        if (visibility === Window.FullScreen)
+            showNormal();
+        else
+            showFullScreen();
+    }
+
     width: 800
     height: 800 * (9 / 16)
     visible: true
@@ -36,15 +44,36 @@ Window {
     }
 
     Image {
-        id: img
+        id: background
+
         anchors.fill: parent
-        fillMode: database.stretch() ? Image.Stretch : Image.PreserveAspectFit
+        source: img.source
+        fillMode: Image.Stretch
+        visible: !stretch
+    }
+
+    FastBlur {
+        anchors.fill: background
+        source: background
+        radius: 64
+        visible: !stretch
+    }
+
+    Image {
+        id: img
+
+        anchors.fill: parent
+        fillMode: stretch ? Image.Stretch : Image.PreserveAspectFit
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_F11)
-                if (visibility === Window.FullScreen)
-                    showNormal(); else
-                    showFullScreen()
+                toggleFullscreen();
+
+            if (event.key === Qt.Key_F)
+                toggleFullscreen();
+
+            if (event.key === Qt.Key_S)
+                stretch = (!stretch);
 
             if (event.key === Qt.Key_Forward)
                 updateImage();
@@ -60,6 +89,7 @@ Window {
 
             if (event.key === Qt.Key_Right)
                 updateImage();
+
         }
     }
 
@@ -77,6 +107,7 @@ Window {
 
             Slider {
                 id: brightness
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 value: 0
@@ -84,11 +115,14 @@ Window {
 
             Slider {
                 id: contrast
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
                 value: 0
             }
+
         }
+
     }
 
     BrightnessContrast {
@@ -107,7 +141,7 @@ Window {
         height: 50
         width: parent.width
         color: "black"
-        opacity: 0.6
+        opacity: 0.7
     }
 
     Label {
