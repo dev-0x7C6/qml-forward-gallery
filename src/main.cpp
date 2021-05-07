@@ -1,7 +1,7 @@
 ﻿#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include <src/database.hpp>
+#include <src/controller.hpp>
 
 #include <QCommandLineOption>
 #include <QCommandLineParser>
@@ -34,13 +34,13 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
-	model::Options opts;
+	Logic::Options opts;
 	opts.stretch = parser.isSet("stretch");
 	if (parser.isSet("timeout"))
 		opts.timeout = parser.value("timeout").toInt();
 
 	QStringList list;
-	model::ImageDatabase database(std::move(opts));
+	Logic::Controller controller(std::move(opts));
 
 	for (auto &&path : paths) {
 		QDirIterator iter(path, QDir::Filter::NoDotAndDotDot | QDir::Filter::Files, QDirIterator::Subdirectories);
@@ -52,10 +52,10 @@ int main(int argc, char *argv[]) {
 	if (parser.isSet("sort"))
 		list.sort();
 
-	database.setList(std::move(list));
+	controller.setList(std::move(list));
 
 	QQmlApplicationEngine engine;
-	engine.rootContext()->setContextProperty("database", &database);
+	engine.rootContext()->setContextProperty("controller", &controller);
 
 	const QUrl url(QStringLiteral("qrc:/main.qml"));
 	QObject::connect(

@@ -6,18 +6,18 @@ import QtQuick.Window 2.15
 
 Window {
     id: root
-    property bool stretch: database.stretch()
+    property bool stretch: controller.stretch()
 
     function updateTime() {
-        title.text = database.time();
+        title.text = controller.time();
     }
 
     function next() {
-        img.source = database.next();
+        img.source = controller.next();
     }
 
     function prev() {
-        img.source = database.prev();
+        img.source = controller.prev();
     }
 
     function toggleFullscreen() {
@@ -184,7 +184,7 @@ Window {
     Timer {
         id: nextImageTimer
 
-        interval: database.timeout()
+        interval: controller.timeout()
         running: true
         repeat: true
         onTriggered: next()
