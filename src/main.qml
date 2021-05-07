@@ -6,6 +6,7 @@ import QtQuick.Window 2.15
 
 Window {
     id: root
+
     property bool stretch: controller.stretch()
 
     function updateTime() {

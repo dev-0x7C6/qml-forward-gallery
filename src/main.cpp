@@ -22,7 +22,8 @@ int main(int argc, char *argv[]) {
 
 	parser.addOptions({//
 		{{"d", "directory"}, QCoreApplication::translate("main", "open directory."), QCoreApplication::translate("main", "directory")},
-		{{"q", "sort"}, QCoreApplication::translate("main", "sort file order by name.")},
+		{{"", "sort"}, QCoreApplication::translate("main", "sort file order by name.")},
+		{{"", "random"}, QCoreApplication::translate("main", "random sequence.")},
 		{{"s", "stretch"}, QCoreApplication::translate("main", "stretch image")},
 		{{"t", "timeout"}, QCoreApplication::translate("main", "next slide timeout"), QCoreApplication::translate("main", "time-ms")}});
 	parser.process(app);
@@ -36,6 +37,8 @@ int main(int argc, char *argv[]) {
 
 	Logic::Options opts;
 	opts.stretch = parser.isSet("stretch");
+	opts.strategy = parser.isSet("random") ? Logic::Strategy::Random : Logic::Strategy::Order;
+
 	if (parser.isSet("timeout"))
 		opts.timeout = parser.value("timeout").toInt();
 

@@ -2,6 +2,9 @@
 
 #include <QDateTime>
 
+#include <algorithm>
+#include <random>
+
 using namespace Logic;
 
 namespace {
@@ -29,17 +32,7 @@ auto Controller::count() const noexcept -> int {
 }
 
 QString Controller::next() noexcept {
-	return FILE_URL_PREFIX + m_list[m_history.next([this]() {
-		if (m_index.has_value())
-			m_index = m_index.value() + 1;
-		else
-			m_index = 0;
-
-		if (m_index.value() >= m_list.size())
-			m_index = 0;
-
-		return m_index.value();
-	})];
+	return FILE_URL_PREFIX + m_list[m_history.next(generator())];
 }
 
 QString Controller::prev() noexcept {
@@ -48,4 +41,44 @@ QString Controller::prev() noexcept {
 
 void Controller::setList(QStringList &&rhs) {
 	m_list = std::move(rhs);
+}
+
+std::function<int()> Controller::generator() {
+	switch (m_options.strategy) {
+		case Strategy::Random:
+			return [this]() -> int {
+				if (m_random_indexes.empty()) {
+					std::vector<int> indexes;
+					indexes.reserve(m_list.count());
+
+					for (auto i = 0; i < m_list.count(); ++i)
+						indexes.emplace_back(i);
+
+					std::random_device rd;
+					std::mt19937 g(rd());
+					std::shuffle(indexes.begin(), indexes.end(), g);
+
+					for (auto &&index : indexes)
+						m_random_indexes.emplace(index);
+				}
+
+				auto ret = m_random_indexes.top();
+				m_random_indexes.pop();
+				return ret;
+			};
+		case Strategy::Order:
+			return [this]() -> int {
+				if (m_index.has_value())
+					m_index = m_index.value() + 1;
+				else
+					m_index = 0;
+
+				if (m_index.value() >= m_list.size())
+					m_index = 0;
+
+				return m_index.value();
+			};
+	}
+
+	return nullptr;
 }
