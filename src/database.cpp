@@ -4,6 +4,10 @@
 
 using namespace model;
 
+namespace {
+constexpr auto FILE_URL_PREFIX = "file://";
+}
+
 ImageDatabase::ImageDatabase(Options &&options)
 		: m_options(std::move(options)) {
 }
@@ -26,6 +30,21 @@ auto model::ImageDatabase::count() const noexcept -> int {
 
 auto ImageDatabase::path(int index) const noexcept -> QString {
 	return m_list[index];
+}
+
+QString ImageDatabase::next() noexcept {
+	return FILE_URL_PREFIX + m_list[m_history.next([this]() {
+		if (m_index.has_value())
+			m_index = m_index.value() + 1;
+		else
+			m_index = 0;
+
+		return m_index.value();
+	})];
+}
+
+QString ImageDatabase::prev() noexcept {
+	return FILE_URL_PREFIX + m_list[m_history.prev()];
 }
 
 void ImageDatabase::setList(QStringList &&rhs) {

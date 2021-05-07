@@ -6,24 +6,18 @@ import QtQuick.Window 2.15
 
 Window {
     id: root
-
-    property int index: -1
     property bool stretch: database.stretch()
 
     function updateTime() {
         title.text = database.time();
     }
 
-    function updateImage(delta = 1) {
-        index += delta;
-        if (index >= database.count())
-            index = 0;
+    function next() {
+        img.source = database.next();
+    }
 
-        if (index < 0)
-            index = database.count() - 1;
-
-        img.source = "file://" + database.path(index);
-        nextImageTimer.restart();
+    function prev() {
+        img.source = database.prev();
     }
 
     function toggleFullscreen() {
@@ -40,14 +34,16 @@ Window {
     title: qsTr("qml-forward-gallery")
     Component.onCompleted: {
         updateTime();
-        updateImage();
+        next();
     }
 
     Image {
         id: background
 
+        asynchronous: true
         anchors.fill: parent
         source: img.source
+        smooth: false
         fillMode: Image.Stretch
         visible: !stretch
     }
@@ -70,6 +66,8 @@ Window {
     Image {
         id: img
 
+        smooth: true
+        onSourceChanged: nextImageTimer.restart()
         anchors.fill: parent
         fillMode: stretch ? Image.Stretch : Image.PreserveAspectFit
         focus: true
@@ -84,19 +82,19 @@ Window {
                 stretch = (!stretch);
 
             if (event.key === Qt.Key_Forward)
-                updateImage();
+                next();
 
             if (event.key === Qt.Key_Back)
-                updateImage(-1);
+                prev();
 
             if (event.key === Qt.Key_Space)
-                updateImage();
+                next();
 
             if (event.key === Qt.Key_Left)
-                updateImage(-1);
+                prev();
 
             if (event.key === Qt.Key_Right)
-                updateImage();
+                next();
 
         }
     }
@@ -189,7 +187,7 @@ Window {
         interval: database.timeout()
         running: true
         repeat: true
-        onTriggered: updateImage()
+        onTriggered: next()
     }
 
 }
