@@ -10,10 +10,14 @@ Originally based on [qbijin-tokei](https://github.com/dev-0x7C6/qbijin-tokei)
 Usage: ./qml-forward-gallery [options]
 
 Options:
-  -h, --help                     Displays help on commandline options.
-  --help-all                     Displays help including Qt specific options.
-  -v, --version                  Displays version information.
-  -d, --directory <directories>  open directory.
+  -h, --help                   Displays help on commandline options.
+  --help-all                   Displays help including Qt specific options.
+  -v, --version                Displays version information.
+  -d, --directory <directory>  open directory.
+  --sort                       sort file order by name.
+  --random                     random sequence.
+  -s, --stretch                stretch image
+  -t, --timeout <time-ms>      next slide timeout
 ```
 
 #### Installation process
