@@ -35,6 +35,9 @@ QString Controller::next() noexcept {
 		else
 			m_index = 0;
 
+		if (m_index.value() >= m_list.size())
+			m_index = 0;
+
 		return m_index.value();
 	})];
 }
