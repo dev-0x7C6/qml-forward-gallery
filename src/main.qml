@@ -53,10 +53,18 @@ Window {
     }
 
     FastBlur {
+        id: blurBackground
+
         anchors.fill: background
         source: background
-        radius: 64
+        radius: 32
         visible: !stretch
+    }
+
+    BrightnessContrast {
+        anchors.fill: background
+        source: blurBackground
+        brightness: -0.6
     }
 
     Image {
@@ -110,7 +118,7 @@ Window {
 
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
-                value: 0
+                value: 0.5
             }
 
             Slider {
@@ -118,7 +126,15 @@ Window {
 
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
-                value: 0
+                value: 0.5
+            }
+
+            Slider {
+                id: gamma
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 50
+                value: 1
             }
 
         }
@@ -130,8 +146,14 @@ Window {
 
         anchors.fill: img
         source: img
-        brightness: brightness.value
-        contrast: contrast.value
+        brightness: (brightness.value * 2) - 1
+        contrast: (contrast.value * 2) - 1
+    }
+
+    GammaAdjust {
+        anchors.fill: background
+        source: effect
+        gamma: gamma.value
     }
 
     Rectangle {
