@@ -69,6 +69,7 @@ Window {
         onBrightnessChanged: controller.display_brightness = brightness
         onContrastChanged: contrast.display_contrast = contrast
         onGammaChanged: contrast.display_gamma = gamma
+        drawer.onAboutToHide: scene.img.focus = true
         anchors.fill: parent
     }
 

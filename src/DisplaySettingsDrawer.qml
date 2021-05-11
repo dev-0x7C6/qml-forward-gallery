@@ -8,11 +8,10 @@ Item {
     property alias brightness: brightness.value
     property alias contrast: contrast.value
     property alias gamma: gamma.value
+    property alias drawer: drawer
 
     Drawer {
-        // onAboutToHide: scene.img.focus = true
-
-        id: bottomDrawer
+        id: drawer
 
         edge: Qt.BottomEdge
         dragMargin: 100
