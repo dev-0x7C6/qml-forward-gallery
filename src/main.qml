@@ -41,7 +41,6 @@ Window {
     Image {
         id: background
 
-        asynchronous: true
         anchors.fill: parent
         source: img.source
         smooth: false
