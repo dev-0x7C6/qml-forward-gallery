@@ -32,11 +32,36 @@ auto Controller::count() const noexcept -> int {
 }
 
 QString Controller::next() noexcept {
+	m_settings.sync();
 	return FILE_URL_PREFIX + m_list[m_history.next(generator())];
 }
 
 QString Controller::prev() noexcept {
 	return FILE_URL_PREFIX + m_list[m_history.prev()];
+}
+
+auto Controller::display_brightness() const noexcept -> double {
+	return m_settings.value("display/brightness", 0.5).toDouble();
+}
+
+double Controller::display_contrast() const noexcept {
+	return m_settings.value("display/contrast", 0.5).toDouble();
+}
+
+double Controller::display_gamma() const noexcept {
+	return m_settings.value("display/gamma", 1.0).toDouble();
+}
+
+void Controller::set_display_brightness(const double value) noexcept {
+	m_settings.setValue("display/brightness", value);
+}
+
+void Controller::set_display_contrast(const double value) noexcept {
+	m_settings.setValue("display/contrast", value);
+}
+
+void Controller::set_display_gamma(const double value) noexcept {
+	m_settings.setValue("display/gamma", value);
 }
 
 void Controller::setList(QStringList &&rhs) {

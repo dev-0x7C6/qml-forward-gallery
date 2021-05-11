@@ -63,6 +63,12 @@ Window {
     DisplaySettingsDrawer {
         id: display_settings
 
+        brightness: controller.display_brightness
+        contrast: controller.display_contrast
+        gamma: controller.display_gamma
+        onBrightnessChanged: controller.display_brightness = brightness
+        onContrastChanged: contrast.display_contrast = contrast
+        onGammaChanged: contrast.display_gamma = gamma
         anchors.fill: parent
     }
 
